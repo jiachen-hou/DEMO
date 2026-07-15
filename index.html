@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="蓝月亮电商运营后台自动化演示站">
+  <title>蓝月亮电商运营后台｜商品销售报表</title>
+  <style>
+    :root{--brand:#185adb;--brand2:#0d3b93;--ink:#172033;--muted:#72809a;--line:#e8edf5;--bg:#f3f6fb;--card:#fff;--green:#17a673;--red:#e05252;--orange:#f59e0b;--shadow:0 10px 30px rgba(28,52,91,.07)}
+    *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;font-family:"Microsoft YaHei","PingFang SC",Arial,sans-serif;background:var(--bg);color:var(--ink)}button,input,select{font:inherit}.layout{min-height:100vh;display:flex}.sidebar{position:fixed;inset:0 auto 0 0;width:236px;background:linear-gradient(180deg,#123b87 0%,#0b2d68 100%);color:#fff;z-index:5}.brand{height:72px;display:flex;align-items:center;gap:11px;padding:0 22px;border-bottom:1px solid rgba(255,255,255,.12)}.brand-mark{width:34px;height:34px;border-radius:12px;background:linear-gradient(135deg,#79b7ff,#fff);color:#174a9c;display:grid;place-items:center;font-weight:900}.brand strong{display:block;font-size:17px}.brand small{color:#bcd4ff}.nav{padding:18px 12px}.nav-group{padding:9px 12px;color:#86a8df;font-size:11px;letter-spacing:1px}.nav-item{height:44px;display:flex;align-items:center;gap:12px;margin:4px 0;padding:0 13px;border-radius:10px;color:#cfddf6;cursor:pointer;transition:.2s}.nav-item:hover,.nav-item.active{background:rgba(255,255,255,.12);color:#fff}.nav-item.active{box-shadow:inset 3px 0 #8ec5ff}.nav-icon{width:20px;text-align:center}.side-help{position:absolute;left:16px;right:16px;bottom:18px;padding:14px;border:1px solid rgba(255,255,255,.16);border-radius:12px;background:rgba(255,255,255,.08);font-size:12px;line-height:1.6;color:#cfe0ff}.main{width:calc(100% - 236px);margin-left:236px}.topbar{height:72px;background:#fff;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 28px;position:sticky;top:0;z-index:4}.crumb{font-size:14px;color:var(--muted)}.crumb b{color:var(--ink)}.top-actions{display:flex;align-items:center;gap:12px}.icon-btn{width:36px;height:36px;border:1px solid var(--line);border-radius:10px;background:#fff;cursor:pointer}.avatar{width:34px;height:34px;border-radius:50%;background:#e5efff;color:var(--brand);display:grid;place-items:center;font-weight:700}.user-meta{font-size:13px}.user-meta small{display:block;color:var(--muted);margin-top:2px}.content{padding:25px 28px 38px;max-width:1680px;margin:auto}.page-head{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:22px}.page-head h1{margin:0 0 7px;font-size:25px}.page-head p{margin:0;color:var(--muted);font-size:13px}.live{display:flex;align-items:center;gap:8px;padding:8px 12px;background:#eaf8f2;color:#14805d;border-radius:999px;font-size:12px}.live-dot{width:7px;height:7px;border-radius:50%;background:#20bd83;box-shadow:0 0 0 4px rgba(32,189,131,.13)}.metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:18px}.metric{background:var(--card);border:1px solid var(--line);border-radius:15px;padding:18px;box-shadow:var(--shadow)}.metric-top{display:flex;justify-content:space-between;align-items:center}.metric-label{font-size:13px;color:var(--muted)}.metric-icon{width:35px;height:35px;border-radius:10px;background:#edf4ff;display:grid;place-items:center;color:var(--brand)}.metric-value{font-size:25px;font-weight:800;margin:12px 0 7px}.metric-foot{font-size:12px;color:var(--muted)}.up{color:var(--green);font-weight:700}.down{color:var(--red);font-weight:700}.workspace{display:grid;grid-template-columns:minmax(0,2fr) minmax(280px,.8fr);gap:18px;margin-bottom:18px}.card{background:var(--card);border:1px solid var(--line);border-radius:15px;box-shadow:var(--shadow)}.card-head{padding:18px 20px 14px;display:flex;justify-content:space-between;align-items:center}.card-title{font-size:16px;font-weight:700}.card-sub{color:var(--muted);font-size:12px;margin-top:4px}.chart{height:250px;padding:5px 24px 20px;display:flex;align-items:flex-end;gap:13px;border-bottom:1px solid #f1f4f8}.bar-col{flex:1;height:100%;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;gap:8px}.bar-value{font-size:11px;color:var(--muted)}.bar{width:min(38px,70%);border-radius:8px 8px 3px 3px;background:linear-gradient(180deg,#5f98ff,#1c5ed7);min-height:8px}.bar-label{font-size:11px;color:var(--muted)}.chart-legend{padding:13px 20px;color:var(--muted);font-size:12px}.rank-list{padding:0 20px 18px}.rank{display:grid;grid-template-columns:26px 1fr auto;align-items:center;gap:10px;padding:12px 0;border-top:1px solid #f0f3f8}.rank:first-child{border-top:0}.rank-no{width:22px;height:22px;border-radius:7px;background:#edf3ff;color:var(--brand);display:grid;place-items:center;font-size:11px;font-weight:800}.rank-name{font-size:13px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.rank-sales{font-size:12px;font-weight:700}.filters-card{padding:20px;margin-bottom:18px}.section-heading{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}.section-heading h2{font-size:16px;margin:0}.robot-tip{font-size:12px;color:#7b5c11;background:#fff8df;border:1px solid #f7e5a1;border-radius:9px;padding:7px 10px}.filters{display:grid;grid-template-columns:repeat(6,minmax(125px,1fr));gap:13px}.field label{display:block;font-size:12px;color:#566177;margin-bottom:7px;font-weight:700}.field input,.field select{width:100%;height:39px;border:1px solid #dce3ed;border-radius:9px;padding:0 10px;background:#fff;color:#253047;outline:none}.field input:focus,.field select:focus{border-color:#6c9eff;box-shadow:0 0 0 3px #eaf1ff}.filter-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:16px}.btn{height:39px;padding:0 18px;border:0;border-radius:9px;cursor:pointer;font-weight:700}.btn-primary{background:var(--brand);color:#fff}.btn-primary:hover{background:#0f4fc4}.btn-light{background:#edf3ff;color:#2455a3}.btn-outline{background:#fff;border:1px solid #cdd8e9;color:#3d4b64}.table-card{overflow:hidden}.table-toolbar{padding:17px 20px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--line)}.table-tools{display:flex;gap:10px;align-items:center}.result-count{font-size:12px;color:var(--muted)}.table-wrap{overflow:auto}table{width:100%;border-collapse:collapse;font-size:12px}th,td{padding:13px 14px;border-bottom:1px solid #edf1f6;text-align:left;white-space:nowrap}th{background:#f8fafd;color:#5d687c;font-weight:700}tbody tr:hover{background:#f8fbff}.product{font-weight:700;color:#26344d}.amount{font-weight:700}.tag{display:inline-block;padding:4px 9px;border-radius:999px;font-size:11px;font-weight:700}.tag-hot{background:#e8f8f1;color:#13805b}.tag-normal{background:#eaf2ff;color:#245db9}.tag-slow{background:#fff0f0;color:#c64545}.tag-warn{background:#fff6df;color:#9a6710}.pagination{display:flex;justify-content:space-between;align-items:center;padding:15px 20px;color:var(--muted);font-size:12px}.pages{display:flex;gap:6px}.page{width:30px;height:30px;border:1px solid var(--line);background:#fff;border-radius:8px}.page.active{background:var(--brand);color:#fff;border-color:var(--brand)}.toast{position:fixed;right:24px;bottom:24px;padding:13px 18px;border-radius:11px;background:#172033;color:#fff;box-shadow:0 12px 30px rgba(0,0,0,.18);font-size:13px;transform:translateY(90px);opacity:0;transition:.25s;z-index:20}.toast.show{transform:none;opacity:1}.empty{text-align:center;padding:45px;color:var(--muted)}
+    @media(max-width:1100px){.metrics{grid-template-columns:repeat(2,1fr)}.workspace{grid-template-columns:1fr}.filters{grid-template-columns:repeat(3,1fr)}}@media(max-width:760px){.sidebar{width:72px}.brand{padding:0 18px}.brand-copy,.nav-item span:last-child,.nav-group,.side-help{display:none}.nav-item{justify-content:center}.main{width:calc(100% - 72px);margin-left:72px}.content{padding:18px}.topbar{padding:0 18px}.user-meta{display:none}.metrics,.filters{grid-template-columns:1fr}.page-head{gap:12px}.robot-tip{display:none}}
+  </style>
+</head>
+<body>
+<div class="layout">
+  <aside class="sidebar">
+    <div class="brand"><div class="brand-mark">月</div><div class="brand-copy"><strong>蓝月亮</strong><small>电商运营中心</small></div></div>
+    <nav class="nav" aria-label="主导航">
+      <div class="nav-group">运营概览</div>
+      <div class="nav-item"><span class="nav-icon">⌂</span><span>首页看板</span></div>
+      <div class="nav-item active" id="menuSalesReport"><span class="nav-icon">▥</span><span>商品销售报表</span></div>
+      <div class="nav-item"><span class="nav-icon">◎</span><span>活动复盘</span></div>
+      <div class="nav-group">业务管理</div>
+      <div class="nav-item"><span class="nav-icon">▣</span><span>库存监控</span></div>
+      <div class="nav-item"><span class="nav-icon">◈</span><span>渠道管理</span></div>
+      <div class="nav-item"><span class="nav-icon">⚙</span><span>系统设置</span></div>
+    </nav>
+    <div class="side-help">自动化演示环境<br>页面元素已使用稳定 ID，适合影刀捕获与流程编排。</div>
+  </aside>
+  <main class="main">
+    <header class="topbar"><div class="crumb">电商运营中心 / <b>商品销售报表</b></div><div class="top-actions"><button class="icon-btn" id="notificationBtn" title="消息">♢</button><div class="avatar">运</div><div class="user-meta">运营演示账号<small>管理员</small></div></div></header>
+    <div class="content">
+      <section class="page-head"><div><h1>商品销售报表</h1><p>多渠道商品经营分析 · 数据更新于 2026-06-18 10:30</p></div><div class="live"><span class="live-dot"></span>数据服务正常</div></section>
+      <section class="metrics" aria-label="核心指标">
+        <div class="metric"><div class="metric-top"><span class="metric-label">销售额</span><span class="metric-icon">¥</span></div><div class="metric-value" id="sumAmount">0</div><div class="metric-foot"><span class="up">↑ 12.6%</span> 较上周期</div></div>
+        <div class="metric"><div class="metric-top"><span class="metric-label">销售数量</span><span class="metric-icon">▦</span></div><div class="metric-value" id="sumQty">0</div><div class="metric-foot"><span class="up">↑ 8.4%</span> 较上周期</div></div>
+        <div class="metric"><div class="metric-top"><span class="metric-label">退款金额</span><span class="metric-icon">↩</span></div><div class="metric-value" id="sumRefund">0</div><div class="metric-foot"><span class="down">↓ 2.1%</span> 退款率改善</div></div>
+        <div class="metric"><div class="metric-top"><span class="metric-label">当前库存</span><span class="metric-icon">▤</span></div><div class="metric-value" id="sumStock">0</div><div class="metric-foot"><span class="down" id="stockWarning">2 个</span> 商品库存预警</div></div>
+      </section>
+      <section class="workspace">
+        <div class="card"><div class="card-head"><div><div class="card-title">近 7 日销售趋势</div><div class="card-sub">全渠道销售额（万元）</div></div><select id="trendRange" aria-label="趋势周期"><option>近7日</option><option>近30日</option></select></div><div class="chart" id="salesChart"></div><div class="chart-legend">● 销售额　　近 7 日累计 ¥28.6 万</div></div>
+        <div class="card"><div class="card-head"><div><div class="card-title">热销商品 TOP 5</div><div class="card-sub">按销售金额排序</div></div></div><div class="rank-list" id="rankList"></div></div>
+      </section>
+      <section class="card filters-card">
+        <div class="section-heading"><h2>查询条件</h2><div class="robot-tip">影刀演示：选择渠道与品类 → 查询 → 导出 CSV</div></div>
+        <div class="filters">
+          <div class="field"><label for="startDate">开始日期</label><input id="startDate" type="date" value="2026-06-01"></div>
+          <div class="field"><label for="endDate">结束日期</label><input id="endDate" type="date" value="2026-06-18"></div>
+          <div class="field"><label for="channel">渠道</label><select id="channel"><option value="">全部渠道</option><option>天猫旗舰店</option><option>京东自营</option><option>抖音旗舰店</option><option>线下KA</option></select></div>
+          <div class="field"><label for="category">商品品类</label><select id="category"><option value="">全部品类</option><option>衣物清洁</option><option>厨房清洁</option><option>个人清洁</option><option>卫浴清洁</option><option>组合套装</option></select></div>
+          <div class="field"><label for="keyword">商品关键词</label><input id="keyword" placeholder="名称或商品编码"></div>
+          <div class="field"><label for="status">商品状态</label><select id="status"><option value="">全部状态</option><option>正常</option><option>爆品</option><option>滞销</option><option>库存预警</option></select></div>
+        </div>
+        <div class="filter-actions"><button class="btn btn-light" id="resetBtn">重置</button><button class="btn btn-primary" id="searchBtn">查询数据</button></div>
+      </section>
+      <section class="card table-card">
+        <div class="table-toolbar"><div><div class="card-title">查询结果</div><div class="result-count" id="resultCount">共 0 条商品记录</div></div><div class="table-tools"><span class="result-count" id="downloadInfo">尚未导出文件</span><button class="btn btn-outline" id="exportBtn">导出 CSV</button></div></div>
+        <div class="table-wrap"><table id="salesTable"><thead><tr><th>商品编码</th><th>商品名称</th><th>品类</th><th>渠道</th><th>销售数量</th><th>销售金额</th><th>退款金额</th><th>当前库存</th><th>状态</th><th>负责人</th></tr></thead><tbody id="tbody"></tbody></table></div>
+        <div class="pagination"><span>每页 20 条</span><div class="pages"><button class="page active">1</button><button class="page">2</button><button class="page">›</button></div></div>
+      </section>
+    </div>
+  </main>
+</div>
+<div class="toast" id="toast" role="status"></div>
+<script>
+const allData=[
+{code:"BM-LQ-001",name:"蓝月亮深层洁净洗衣液 3kg",category:"衣物清洁",channel:"天猫旗舰店",qty:1622,amount:89381.06,refund:1754.37,stock:325,status:"爆品",owner:"陈运营"},
+{code:"BM-LQ-002",name:"蓝月亮薰衣草洗衣液 2kg",category:"衣物清洁",channel:"天猫旗舰店",qty:2284,amount:79103.27,refund:1389.89,stock:236,status:"库存预警",owner:"李渠道"},
+{code:"BM-LQ-003",name:"蓝月亮至尊洗衣液 660g",category:"衣物清洁",channel:"天猫旗舰店",qty:690,amount:17857.08,refund:556.73,stock:1248,status:"正常",owner:"王电商"},
+{code:"BM-LQ-004",name:"蓝月亮亮白增艳洗衣液 1kg",category:"衣物清洁",channel:"京东自营",qty:812,amount:21673.22,refund:588.10,stock:780,status:"正常",owner:"陈运营"},
+{code:"BM-XS-001",name:"蓝月亮洗手液 500g",category:"个人清洁",channel:"抖音旗舰店",qty:1603,amount:23396.73,refund:273.48,stock:319,status:"爆品",owner:"赵推广"},
+{code:"BM-CJ-001",name:"蓝月亮餐具净 1kg",category:"厨房清洁",channel:"京东自营",qty:745,amount:12490.55,refund:420.88,stock:600,status:"正常",owner:"李渠道"},
+{code:"BM-YW-001",name:"蓝月亮油污克星 500g",category:"厨房清洁",channel:"天猫旗舰店",qty:530,amount:11183.20,refund:385.60,stock:480,status:"正常",owner:"王电商"},
+{code:"BM-WY-001",name:"蓝月亮洁厕液 500g",category:"卫浴清洁",channel:"线下KA",qty:130,amount:1504.90,refund:102.30,stock:3600,status:"滞销",owner:"陈运营"},
+{code:"BM-JJ-001",name:"蓝月亮玻璃水 500g",category:"卫浴清洁",channel:"京东自营",qty:94,amount:1325.62,refund:81.40,stock:4200,status:"滞销",owner:"周品类"},
+{code:"BM-TZ-001",name:"蓝月亮洗衣液组合装",category:"组合套装",channel:"抖音旗舰店",qty:1856,amount:116515.51,refund:2009.70,stock:300,status:"爆品",owner:"赵推广"},
+{code:"BM-TZ-002",name:"蓝月亮家清组合装",category:"组合套装",channel:"天猫旗舰店",qty:613,amount:36823.67,refund:1441.12,stock:1167,status:"正常",owner:"李渠道"},
+{code:"BM-RS-001",name:"蓝月亮柔顺剂 1kg",category:"衣物清洁",channel:"线下KA",qty:120,amount:2384.40,refund:178.80,stock:3300,status:"滞销",owner:"周品类"}
+];
+let currentData=[...allData];
+const money=n=>'¥ '+n.toLocaleString('zh-CN',{minimumFractionDigits:2,maximumFractionDigits:2});
+function tagClass(s){return s==='爆品'?'tag-hot':s==='滞销'?'tag-slow':s==='库存预警'?'tag-warn':'tag-normal'}
+function showToast(message){const el=document.getElementById('toast');el.textContent=message;el.classList.add('show');clearTimeout(window.toastTimer);window.toastTimer=setTimeout(()=>el.classList.remove('show'),2200)}
+function render(data){
+ const tbody=document.getElementById('tbody');tbody.innerHTML='';
+ if(!data.length){tbody.innerHTML='<tr><td colspan="10" class="empty">暂无符合条件的数据，请调整筛选条件</td></tr>'}
+ data.forEach(r=>{const tr=document.createElement('tr');tr.innerHTML=`<td>${r.code}</td><td class="product">${r.name}</td><td>${r.category}</td><td>${r.channel}</td><td>${r.qty.toLocaleString()}</td><td class="amount">${money(r.amount)}</td><td>${money(r.refund)}</td><td>${r.stock.toLocaleString()}</td><td><span class="tag ${tagClass(r.status)}">${r.status}</span></td><td>${r.owner}</td>`;tbody.appendChild(tr)});
+ document.getElementById('sumQty').textContent=data.reduce((s,r)=>s+r.qty,0).toLocaleString();
+ document.getElementById('sumAmount').textContent=money(data.reduce((s,r)=>s+r.amount,0));
+ document.getElementById('sumRefund').textContent=money(data.reduce((s,r)=>s+r.refund,0));
+ document.getElementById('sumStock').textContent=data.reduce((s,r)=>s+r.stock,0).toLocaleString();
+ document.getElementById('resultCount').textContent=`共 ${data.length} 条商品记录`;
+}
+function search(){const c=channel.value,g=category.value,k=keyword.value.trim().toLowerCase(),s=status.value;currentData=allData.filter(r=>(!c||r.channel===c)&&(!g||r.category===g)&&(!k||r.name.toLowerCase().includes(k)||r.code.toLowerCase().includes(k))&&(!s||r.status===s));render(currentData);downloadInfo.textContent='尚未导出文件';showToast(`查询完成，共 ${currentData.length} 条记录`)}
+function reset(){channel.value='';category.value='';keyword.value='';status.value='';startDate.value='2026-06-01';endDate.value='2026-06-18';currentData=[...allData];render(currentData);downloadInfo.textContent='尚未导出文件';showToast('筛选条件已重置')}
+function exportCsv(){if(!currentData.length){showToast('当前没有可导出的数据');return}const header=['商品编码','商品名称','品类','渠道','销售数量','销售金额','退款金额','当前库存','商品状态','负责人'];const rows=currentData.map(r=>[r.code,r.name,r.category,r.channel,r.qty,r.amount.toFixed(2),r.refund.toFixed(2),r.stock,r.status,r.owner]);const csv=[header,...rows].map(row=>row.map(v=>`"${String(v).replace(/"/g,'""')}"`).join(',')).join('\n');const blob=new Blob(['\ufeff'+csv],{type:'text/csv;charset=utf-8'});const filename=`蓝月亮商品销售报表_${channel.value||'全部渠道'}_${category.value||'全部品类'}.csv`;const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=filename;document.body.appendChild(a);a.click();a.remove();URL.revokeObjectURL(a.href);downloadInfo.textContent=`已导出：${filename}`;showToast(`导出成功，共 ${currentData.length} 条记录`)}
+function renderChart(){const values=[2.9,3.5,3.2,4.7,4.1,5.3,4.9],labels=['06/12','06/13','06/14','06/15','06/16','06/17','06/18'],max=Math.max(...values);salesChart.innerHTML=values.map((v,i)=>`<div class="bar-col"><div class="bar-value">${v}</div><div class="bar" style="height:${v/max*78}%"></div><div class="bar-label">${labels[i]}</div></div>`).join('')}
+function renderRanks(){rankList.innerHTML=[...allData].sort((a,b)=>b.amount-a.amount).slice(0,5).map((r,i)=>`<div class="rank"><span class="rank-no">${i+1}</span><span class="rank-name">${r.name}</span><span class="rank-sales">${money(r.amount)}</span></div>`).join('')}
+searchBtn.addEventListener('click',search);resetBtn.addEventListener('click',reset);exportBtn.addEventListener('click',exportCsv);notificationBtn.addEventListener('click',()=>showToast('暂无新的运营消息'));keyword.addEventListener('keydown',e=>{if(e.key==='Enter')search()});render(currentData);renderChart();renderRanks();
+</script>
+</body>
+</html>

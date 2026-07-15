@@ -57,8 +57,8 @@
       </section>
       <section class="card table-card">
         <div class="table-toolbar"><div><div class="card-title">查询结果</div><div class="result-count" id="resultCount">共 0 条商品记录</div></div><div class="table-tools"><span class="result-count" id="downloadInfo">尚未导出文件</span><button class="btn btn-outline" id="exportBtn">导出 CSV</button></div></div>
-        <div class="table-wrap"><table id="salesTable"><thead><tr><th>商品编码</th><th>商品名称</th><th>品类</th><th>渠道</th><th>销售数量</th><th>销售金额</th><th>退款金额</th><th>当前库存</th><th>状态</th><th>负责人</th></tr></thead><tbody id="tbody"></tbody></table></div>
-        <div class="pagination"><span>每页 20 条</span><div class="pages"><button class="page active">1</button><button class="page">2</button><button class="page">›</button></div></div>
+        <div class="table-wrap"><table id="salesTable"><thead><tr><th>日期</th><th>商品编码</th><th>商品名称</th><th>品类</th><th>渠道</th><th>销售数量</th><th>销售金额</th><th>退款金额</th><th>当前库存</th><th>状态</th><th>负责人</th></tr></thead><tbody id="tbody"></tbody></table></div>
+        <div class="pagination"><label>每页 <select id="pageSize" aria-label="每页条数"><option value="10">10 条</option><option value="20">20 条</option><option value="50">50 条</option></select></label><div class="pages" id="paginationPages"></div></div>
       </section>
       </div>
       <div class="page-view" id="view-dashboard"></div>
@@ -110,23 +110,27 @@ const allData=[
 {code:"BM-LQ-009",name:"蓝月亮机洗至尊洗衣液 2kg",category:"衣物清洁",channel:"线下KA",qty:342,amount:16723.80,refund:326.15,stock:1340,status:"正常",owner:"周品类"},
 {code:"BM-CJ-004",name:"蓝月亮洗碗机专用凝珠 30颗",category:"厨房清洁",channel:"天猫旗舰店",qty:952,amount:46638.48,refund:812.34,stock:472,status:"爆品",owner:"王电商"}
 ];
+allData.forEach((row,index)=>{const day=18-(index%18);row.date=`2026-06-${String(day).padStart(2,'0')}`});
 let currentData=[...allData];
+let currentPage=1;
 const money=n=>'¥ '+n.toLocaleString('zh-CN',{minimumFractionDigits:2,maximumFractionDigits:2});
 function tagClass(s){return s==='爆品'?'tag-hot':s==='滞销'?'tag-slow':s==='库存预警'?'tag-warn':'tag-normal'}
 function showToast(message){const el=document.getElementById('toast');el.textContent=message;el.classList.add('show');clearTimeout(window.toastTimer);window.toastTimer=setTimeout(()=>el.classList.remove('show'),2200)}
 function render(data){
  const tbody=document.getElementById('tbody');tbody.innerHTML='';
- if(!data.length){tbody.innerHTML='<tr><td colspan="10" class="empty">暂无符合条件的数据，请调整筛选条件</td></tr>'}
- data.forEach(r=>{const tr=document.createElement('tr');tr.innerHTML=`<td>${r.code}</td><td class="product">${r.name}</td><td>${r.category}</td><td>${r.channel}</td><td>${r.qty.toLocaleString()}</td><td class="amount">${money(r.amount)}</td><td>${money(r.refund)}</td><td>${r.stock.toLocaleString()}</td><td><span class="tag ${tagClass(r.status)}">${r.status}</span></td><td>${r.owner}</td>`;tbody.appendChild(tr)});
+ const size=Number(document.getElementById('pageSize')?.value||10),totalPages=Math.max(1,Math.ceil(data.length/size));currentPage=Math.min(currentPage,totalPages);const start=(currentPage-1)*size,pageData=data.slice(start,start+size);
+ if(!data.length){tbody.innerHTML='<tr><td colspan="11" class="empty">暂无符合条件的数据，请调整筛选条件</td></tr>'}
+ pageData.forEach(r=>{const tr=document.createElement('tr');tr.innerHTML=`<td>${r.date}</td><td>${r.code}</td><td class="product">${r.name}</td><td>${r.category}</td><td>${r.channel}</td><td>${r.qty.toLocaleString()}</td><td class="amount">${money(r.amount)}</td><td>${money(r.refund)}</td><td>${r.stock.toLocaleString()}</td><td><span class="tag ${tagClass(r.status)}">${r.status}</span></td><td>${r.owner}</td>`;tbody.appendChild(tr)});
  document.getElementById('sumQty').textContent=data.reduce((s,r)=>s+r.qty,0).toLocaleString();
  document.getElementById('sumAmount').textContent=money(data.reduce((s,r)=>s+r.amount,0));
  document.getElementById('sumRefund').textContent=money(data.reduce((s,r)=>s+r.refund,0));
  document.getElementById('sumStock').textContent=data.reduce((s,r)=>s+r.stock,0).toLocaleString();
- document.getElementById('resultCount').textContent=`共 ${data.length} 条商品记录`;
+ document.getElementById('resultCount').textContent=data.length?`共 ${data.length} 条商品记录 · 第 ${currentPage}/${totalPages} 页`:'共 0 条商品记录';renderPagination(totalPages);
 }
-function search(){const c=channel.value,g=category.value,k=keyword.value.trim().toLowerCase(),s=status.value;currentData=allData.filter(r=>(!c||r.channel===c)&&(!g||r.category===g)&&(!k||r.name.toLowerCase().includes(k)||r.code.toLowerCase().includes(k))&&(!s||r.status===s));render(currentData);downloadInfo.textContent='尚未导出文件';showToast(`查询完成，共 ${currentData.length} 条记录`)}
-function reset(){channel.value='';category.value='';keyword.value='';status.value='';startDate.value='2026-06-01';endDate.value='2026-06-18';currentData=[...allData];render(currentData);downloadInfo.textContent='尚未导出文件';showToast('筛选条件已重置')}
-function exportCsv(){if(!currentData.length){showToast('当前没有可导出的数据');return}const header=['商品编码','商品名称','品类','渠道','销售数量','销售金额','退款金额','当前库存','商品状态','负责人'];const rows=currentData.map(r=>[r.code,r.name,r.category,r.channel,r.qty,r.amount.toFixed(2),r.refund.toFixed(2),r.stock,r.status,r.owner]);const csv=[header,...rows].map(row=>row.map(v=>`"${String(v).replace(/"/g,'""')}"`).join(',')).join('\n');const blob=new Blob(['\ufeff'+csv],{type:'text/csv;charset=utf-8'});const filename=`蓝月亮商品销售报表_${channel.value||'全部渠道'}_${category.value||'全部品类'}.csv`;const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=filename;document.body.appendChild(a);a.click();a.remove();URL.revokeObjectURL(a.href);downloadInfo.textContent=`已导出：${filename}`;showToast(`导出成功，共 ${currentData.length} 条记录`)}
+function renderPagination(totalPages){const box=document.getElementById('paginationPages');if(!box)return;let html=`<button class="page" data-page="prev" aria-label="上一页" ${currentPage===1?'disabled':''}>‹</button>`;for(let p=1;p<=totalPages;p++)html+=`<button class="page ${p===currentPage?'active':''}" data-page="${p}">${p}</button>`;html+=`<button class="page" data-page="next" aria-label="下一页" ${currentPage===totalPages?'disabled':''}>›</button>`;box.innerHTML=html}
+function search(){const c=channel.value,g=category.value,k=keyword.value.trim().toLowerCase(),s=status.value,from=startDate.value,to=endDate.value;if(from&&to&&from>to){showToast('开始日期不能晚于结束日期');return}currentPage=1;currentData=allData.filter(r=>(!from||r.date>=from)&&(!to||r.date<=to)&&(!c||r.channel===c)&&(!g||r.category===g)&&(!k||r.name.toLowerCase().includes(k)||r.code.toLowerCase().includes(k))&&(!s||r.status===s));render(currentData);downloadInfo.textContent='尚未导出文件';showToast(`查询完成，共 ${currentData.length} 条记录`)}
+function reset(){channel.value='';category.value='';keyword.value='';status.value='';startDate.value='2026-06-01';endDate.value='2026-06-18';pageSize.value='10';currentPage=1;currentData=[...allData];render(currentData);downloadInfo.textContent='尚未导出文件';showToast('筛选条件已重置')}
+function exportCsv(){if(!currentData.length){showToast('当前没有可导出的数据');return}const header=['日期','商品编码','商品名称','品类','渠道','销售数量','销售金额','退款金额','当前库存','商品状态','负责人'];const rows=currentData.map(r=>[r.date,r.code,r.name,r.category,r.channel,r.qty,r.amount.toFixed(2),r.refund.toFixed(2),r.stock,r.status,r.owner]);const csv=[header,...rows].map(row=>row.map(v=>`"${String(v).replace(/"/g,'""')}"`).join(',')).join('\n');const blob=new Blob(['\ufeff'+csv],{type:'text/csv;charset=utf-8'});const filename=`蓝月亮商品销售报表_${channel.value||'全部渠道'}_${category.value||'全部品类'}.csv`;const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=filename;document.body.appendChild(a);a.click();a.remove();URL.revokeObjectURL(a.href);downloadInfo.textContent=`已导出：${filename}`;showToast(`导出成功，共 ${currentData.length} 条记录`)}
 function renderChart(){const values=[2.9,3.5,3.2,4.7,4.1,5.3,4.9],labels=['06/12','06/13','06/14','06/15','06/16','06/17','06/18'],max=Math.max(...values);salesChart.innerHTML=values.map((v,i)=>`<div class="bar-col"><div class="bar-value">${v}</div><div class="bar" style="height:${v/max*78}%"></div><div class="bar-label">${labels[i]}</div></div>`).join('')}
 function renderRanks(){rankList.innerHTML=[...allData].sort((a,b)=>b.amount-a.amount).slice(0,5).map((r,i)=>`<div class="rank"><span class="rank-no">${i+1}</span><span class="rank-name">${r.name}</span><span class="rank-sales">${money(r.amount)}</span></div>`).join('')}
 const metric=(label,value,trend,icon='◆')=>`<div class="metric"><div class="metric-top"><span class="metric-label">${label}</span><span class="metric-icon">${icon}</span></div><div class="metric-value">${value}</div><div class="metric-foot">${trend}</div></div>`;
@@ -159,7 +163,7 @@ function bindSystemActions(){
  modalCancel.addEventListener('click',()=>actionModal.classList.remove('open'));modalConfirm.addEventListener('click',()=>{if(!modalName.value.trim()){showToast('请先填写名称');return}actionModal.classList.remove('open');showToast(`${modalTitle.textContent}成功`)});actionModal.addEventListener('click',e=>{if(e.target===actionModal)actionModal.classList.remove('open')});
 }
 buildViews();bindSystemActions();renderMiniChart('dashboardChart',[2.6,3.2,4.1,3.8,4.9,5.6,6.4,8.2],['08时','10时','12时','14时','16时','18时','20时','22时']);
-searchBtn.addEventListener('click',search);resetBtn.addEventListener('click',reset);exportBtn.addEventListener('click',exportCsv);notificationBtn.addEventListener('click',()=>showToast('3 条待办：库存预警、退款审核、活动复盘'));keyword.addEventListener('keydown',e=>{if(e.key==='Enter')search()});render(currentData);renderChart();renderRanks();if(location.hash&&viewTitles[location.hash.slice(1)])switchView(location.hash.slice(1));
+searchBtn.addEventListener('click',search);resetBtn.addEventListener('click',reset);exportBtn.addEventListener('click',exportCsv);notificationBtn.addEventListener('click',()=>showToast('3 条待办：库存预警、退款审核、活动复盘'));keyword.addEventListener('keydown',e=>{if(e.key==='Enter')search()});pageSize.addEventListener('change',()=>{currentPage=1;render(currentData)});paginationPages.addEventListener('click',e=>{const btn=e.target.closest('button[data-page]');if(!btn||btn.disabled)return;const total=Math.max(1,Math.ceil(currentData.length/Number(pageSize.value)));if(btn.dataset.page==='prev')currentPage=Math.max(1,currentPage-1);else if(btn.dataset.page==='next')currentPage=Math.min(total,currentPage+1);else currentPage=Number(btn.dataset.page);render(currentData)});render(currentData);renderChart();renderRanks();if(location.hash&&viewTitles[location.hash.slice(1)])switchView(location.hash.slice(1));
 </script>
 </body>
 </html>

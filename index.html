@@ -1,3 +1,4 @@
+
 <!doctype html>
 <html lang="zh-CN">
 <head>
@@ -26,7 +27,6 @@
       <div class="nav-item" id="menuChannel" data-view="channel"><span class="nav-icon">◈</span><span>渠道管理</span></div>
       <div class="nav-item" id="menuSettings" data-view="settings"><span class="nav-icon">⚙</span><span>系统设置</span></div>
     </nav>
-    <div class="side-help">自动化演示环境<br>页面元素已使用稳定 ID，适合影刀捕获与流程编排。</div>
   </aside>
   <main class="main">
     <header class="topbar"><div class="crumb">电商运营中心 / <b id="breadcrumbTitle">商品销售报表</b></div><div class="top-actions"><button class="icon-btn" id="notificationBtn" title="消息">♢</button><div class="avatar">运</div><div class="user-meta">运营演示账号<small>管理员</small></div></div></header>
@@ -80,27 +80,7 @@ const allData=[
 {code:"BM-XS-001",name:"蓝月亮洗手液 500g",category:"个人清洁",channel:"抖音旗舰店",qty:1603,amount:23396.73,refund:273.48,stock:319,status:"爆品",owner:"赵推广"},
 {code:"BM-CJ-001",name:"蓝月亮餐具净 1kg",category:"厨房清洁",channel:"京东自营",qty:745,amount:12490.55,refund:420.88,stock:600,status:"正常",owner:"李渠道"},
 {code:"BM-YW-001",name:"蓝月亮油污克星 500g",category:"厨房清洁",channel:"天猫旗舰店",qty:530,amount:11183.20,refund:385.60,stock:480,status:"正常",owner:"王电商"},
-{code:"BM-WY-001",name:"蓝月亮洁厕液 500g",category:"卫浴清洁",channel:"线下KA",qty:130,amount:1504.90,refund:102.30,stock:3600,status:"滞销",owner:"陈运营"},
-{code:"BM-JJ-001",name:"蓝月亮玻璃水 500g",category:"卫浴清洁",channel:"京东自营",qty:94,amount:1325.62,refund:81.40,stock:4200,status:"滞销",owner:"周品类"},
-{code:"BM-TZ-001",name:"蓝月亮洗衣液组合装",category:"组合套装",channel:"抖音旗舰店",qty:1856,amount:116515.51,refund:2009.70,stock:300,status:"爆品",owner:"赵推广"},
-{code:"BM-TZ-002",name:"蓝月亮家清组合装",category:"组合套装",channel:"天猫旗舰店",qty:613,amount:36823.67,refund:1441.12,stock:1167,status:"正常",owner:"李渠道"},
-{code:"BM-RS-001",name:"蓝月亮柔顺剂 1kg",category:"衣物清洁",channel:"线下KA",qty:120,amount:2384.40,refund:178.80,stock:3300,status:"滞销",owner:"周品类"}
-];
-let currentData=[...allData];
-const money=n=>'¥ '+n.toLocaleString('zh-CN',{minimumFractionDigits:2,maximumFractionDigits:2});
-function tagClass(s){return s==='爆品'?'tag-hot':s==='滞销'?'tag-slow':s==='库存预警'?'tag-warn':'tag-normal'}
-function showToast(message){const el=document.getElementById('toast');el.textContent=message;el.classList.add('show');clearTimeout(window.toastTimer);window.toastTimer=setTimeout(()=>el.classList.remove('show'),2200)}
-function render(data){
- const tbody=document.getElementById('tbody');tbody.innerHTML='';
- if(!data.length){tbody.innerHTML='<tr><td colspan="10" class="empty">暂无符合条件的数据，请调整筛选条件</td></tr>'}
- data.forEach(r=>{const tr=document.createElement('tr');tr.innerHTML=`<td>${r.code}</td><td class="product">${r.name}</td><td>${r.category}</td><td>${r.channel}</td><td>${r.qty.toLocaleString()}</td><td class="amount">${money(r.amount)}</td><td>${money(r.refund)}</td><td>${r.stock.toLocaleString()}</td><td><span class="tag ${tagClass(r.status)}">${r.status}</span></td><td>${r.owner}</td>`;tbody.appendChild(tr)});
- document.getElementById('sumQty').textContent=data.reduce((s,r)=>s+r.qty,0).toLocaleString();
- document.getElementById('sumAmount').textContent=money(data.reduce((s,r)=>s+r.amount,0));
- document.getElementById('sumRefund').textContent=money(data.reduce((s,r)=>s+r.refund,0));
- document.getElementById('sumStock').textContent=data.reduce((s,r)=>s+r.stock,0).toLocaleString();
- document.getElementById('resultCount').textContent=`共 ${data.length} 条商品记录`;
-}
-function search(){const c=channel.value,g=category.value,k=keyword.value.trim().toLowerCase(),s=status.value;currentData=allData.filter(r=>(!c||r.channel===c)&&(!g||r.category===g)&&(!k||r.name.toLowerCase().includes(k)||r.code.toLowerCase().includes(k))&&(!s||r.status===s));render(currentData);downloadInfo.textContent='尚未导出文件';showToast(`查询完成，共 ${currentData.length} 条记录`)}
+{code:"BM-WY-001",name:"蓝月…1813 tokens truncated…ludes(k))&&(!s||r.status===s));render(currentData);downloadInfo.textContent='尚未导出文件';showToast(`查询完成，共 ${currentData.length} 条记录`)}
 function reset(){channel.value='';category.value='';keyword.value='';status.value='';startDate.value='2026-06-01';endDate.value='2026-06-18';currentData=[...allData];render(currentData);downloadInfo.textContent='尚未导出文件';showToast('筛选条件已重置')}
 function exportCsv(){if(!currentData.length){showToast('当前没有可导出的数据');return}const header=['商品编码','商品名称','品类','渠道','销售数量','销售金额','退款金额','当前库存','商品状态','负责人'];const rows=currentData.map(r=>[r.code,r.name,r.category,r.channel,r.qty,r.amount.toFixed(2),r.refund.toFixed(2),r.stock,r.status,r.owner]);const csv=[header,...rows].map(row=>row.map(v=>`"${String(v).replace(/"/g,'""')}"`).join(',')).join('\n');const blob=new Blob(['\ufeff'+csv],{type:'text/csv;charset=utf-8'});const filename=`蓝月亮商品销售报表_${channel.value||'全部渠道'}_${category.value||'全部品类'}.csv`;const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=filename;document.body.appendChild(a);a.click();a.remove();URL.revokeObjectURL(a.href);downloadInfo.textContent=`已导出：${filename}`;showToast(`导出成功，共 ${currentData.length} 条记录`)}
 function renderChart(){const values=[2.9,3.5,3.2,4.7,4.1,5.3,4.9],labels=['06/12','06/13','06/14','06/15','06/16','06/17','06/18'],max=Math.max(...values);salesChart.innerHTML=values.map((v,i)=>`<div class="bar-col"><div class="bar-value">${v}</div><div class="bar" style="height:${v/max*78}%"></div><div class="bar-label">${labels[i]}</div></div>`).join('')}
